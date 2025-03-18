@@ -148,5 +148,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Contact
 
-[Your Name] - [Your Email]
-Project Link: https://github.com/yourusername/renewable-energy-timeseries
+Martin Tay - martin.k.tay@hotmail.com
+
+Project Link: https://github.com/martinktay/xgboost-wind-turbine-power-prediction
