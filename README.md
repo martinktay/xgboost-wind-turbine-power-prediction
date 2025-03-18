@@ -144,7 +144,7 @@ The model uses the following features for prediction:
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+_Note: This project currently does not have a license. Please choose an appropriate license before using or distributing this code._
 
 ## Contact
 
