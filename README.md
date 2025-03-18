@@ -7,7 +7,7 @@ This project implements a machine learning model to predict wind turbine power o
 - Real-time power output prediction
 - Interactive web interface for single predictions
 - REST API endpoints for batch predictions
-- Model performance metrics visualization
+- Model performance metrics visualisation
 - Support for time-series features including lag and rolling means
 
 ## Project Structure
