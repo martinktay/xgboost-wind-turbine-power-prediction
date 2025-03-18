@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renewable Energy Prediction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.css" rel="stylesheet">
+    <style>
+        .prediction-card {
+            transition: transform 0.3s;
+        }
+        .prediction-card:hover {
+            transform: translateY(-5px);
+        }
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 300px;
+            width: 100%;
+        }
+        body { 
+            padding: 20px; 
+            background-color: #f8f9fa;
+        }
+        .prediction-result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .form-group { 
+            margin-bottom: 15px; 
+        }
+        .card {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .section-title {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mb-4">Wind Turbine Power Prediction</h1>
+        
+        <div class="row">
+            <div class="col-md-8">
+                <form id="predictionForm" class="mb-4">
+                    <div class="row">
+                        <!-- Environmental Conditions -->
+                        <div class="col-md-6">
+                            <h3 class="section-title">Environmental Conditions</h3>
+                            <div class="form-group">
+                                <label for="WindSpeed">Wind Speed (m/s)</label>
+                                <input type="number" step="0.1" class="form-control" id="WindSpeed" value="8.5" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="WindDirection">Wind Direction (degrees)</label>
+                                <input type="number" step="0.1" class="form-control" id="WindDirection" value="180" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="AmbientTemperature">Ambient Temperature (°C)</label>
+                                <input type="number" step="0.1" class="form-control" id="AmbientTemperature" value="15.0" required>
+                            </div>
+                        </div>
+
+                        <!-- Turbine Status -->
+                        <div class="col-md-6">
+                            <h3 class="section-title">Turbine Status</h3>
+                            <div class="form-group">
+                                <label for="TurbineStatus">Turbine Status (0/1)</label>
+                                <input type="number" min="0" max="1" class="form-control" id="TurbineStatus" value="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ActivePower">Current Active Power (kW)</label>
+                                <input type="number" step="0.1" class="form-control" id="ActivePower" value="1500" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ReactivePower">Reactive Power (kVAR)</label>
+                                <input type="number" step="0.1" class="form-control" id="ReactivePower" value="100" required>
+                            </div>
+                        </div>
+
+                        <!-- Temperatures -->
+                        <div class="col-md-6">
+                            <h3 class="section-title">Component Temperatures</h3>
+                            <div class="form-group">
+                                <label for="BearingShaftTemperature">Bearing Shaft Temperature (°C)</label>
+                                <input type="number" step="0.1" class="form-control" id="BearingShaftTemperature" value="45.0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="GearboxOilTemperature">Gearbox Oil Temperature (°C)</label>
+                                <input type="number" step="0.1" class="form-control" id="GearboxOilTemperature" value="55.0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="GearboxBearingTemperature">Gearbox Bearing Temperature (°C)</label>
+                                <input type="number" step="0.1" class="form-control" id="GearboxBearingTemperature" value="50.0" required>
+                            </div>
+                        </div>
+
+                        <!-- More Temperatures -->
+                        <div class="col-md-6">
+                            <h3 class="section-title">Additional Temperatures</h3>
+                            <div class="form-group">
+                                <label for="GeneratorWinding1Temperature">Generator Winding 1 Temperature (°C)</label>
+                                <input type="number" step="0.1" class="form-control" id="GeneratorWinding1Temperature" value="65.0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="GeneratorWinding2Temperature">Generator Winding 2 Temperature (°C)</label>
+                                <input type="number" step="0.1" class="form-control" id="GeneratorWinding2Temperature" value="65.0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ControlBoxTemperature">Control Box Temperature (°C)</label>
+                                <input type="number" step="0.1" class="form-control" id="ControlBoxTemperature" value="35.0" required>
+                            </div>
+                        </div>
+
+                        <!-- Blade Angles -->
+                        <div class="col-md-6">
+                            <h3 class="section-title">Blade Parameters</h3>
+                            <div class="form-group">
+                                <label for="Blade1PitchAngle">Blade 1 Pitch Angle (degrees)</label>
+                                <input type="number" step="0.1" class="form-control" id="Blade1PitchAngle" value="2.0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="Blade2PitchAngle">Blade 2 Pitch Angle (degrees)</label>
+                                <input type="number" step="0.1" class="form-control" id="Blade2PitchAngle" value="2.0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="Blade3PitchAngle">Blade 3 Pitch Angle (degrees)</label>
+                                <input type="number" step="0.1" class="form-control" id="Blade3PitchAngle" value="2.0" required>
+                            </div>
+                        </div>
+
+                        <!-- RPM and Position -->
+                        <div class="col-md-6">
+                            <h3 class="section-title">Rotation Parameters</h3>
+                            <div class="form-group">
+                                <label for="GeneratorRPM">Generator RPM</label>
+                                <input type="number" step="0.1" class="form-control" id="GeneratorRPM" value="1800.0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="RotorRPM">Rotor RPM</label>
+                                <input type="number" step="0.1" class="form-control" id="RotorRPM" value="15.0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="NacellePosition">Nacelle Position (degrees)</label>
+                                <input type="number" step="0.1" class="form-control" id="NacellePosition" value="180.0" required>
+                            </div>
+                        </div>
+
+                        <!-- Additional Temperatures -->
+                        <div class="col-md-6">
+                            <h3 class="section-title">Other Parameters</h3>
+                            <div class="form-group">
+                                <label for="HubTemperature">Hub Temperature (°C)</label>
+                                <input type="number" step="0.1" class="form-control" id="HubTemperature" value="40.0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="MainBoxTemperature">Main Box Temperature (°C)</label>
+                                <input type="number" step="0.1" class="form-control" id="MainBoxTemperature" value="42.0" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-3">Predict Power Output</button>
+                </form>
+
+                <div id="result" class="prediction-result" style="display: none;">
+                    <h3>Prediction Result</h3>
+                    <p id="predictionValue" class="h4 text-primary"></p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Model Performance Metrics</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="fw-bold">MAE:</label>
+                            <span>{{ "%.4f"|format(metrics.mae) if metrics else "N/A" }}</span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="fw-bold">RMSE:</label>
+                            <span>{{ "%.4f"|format(metrics.rmse) if metrics else "N/A" }}</span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="fw-bold">R² Score:</label>
+                            <span>{{ "%.4f"|format(metrics.r2) if metrics else "N/A" }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#predictionForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                // Get current date/time for time-based features
+                const now = new Date();
+                
+                // Prepare the data object with all required features
+                const data = {
+                    // Current form values
+                    "ActivePower": parseFloat($('#ActivePower').val()),
+                    "AmbientTemperatue": parseFloat($('#AmbientTemperature').val()),
+                    "BearingShaftTemperature": parseFloat($('#BearingShaftTemperature').val()),
+                    "Blade1PitchAngle": parseFloat($('#Blade1PitchAngle').val()),
+                    "Blade2PitchAngle": parseFloat($('#Blade2PitchAngle').val()),
+                    "Blade3PitchAngle": parseFloat($('#Blade3PitchAngle').val()),
+                    "ControlBoxTemperature": parseFloat($('#ControlBoxTemperature').val()),
+                    "GearboxBearingTemperature": parseFloat($('#GearboxBearingTemperature').val()),
+                    "GearboxOilTemperature": parseFloat($('#GearboxOilTemperature').val()),
+                    "GeneratorRPM": parseFloat($('#GeneratorRPM').val()),
+                    "GeneratorWinding1Temperature": parseFloat($('#GeneratorWinding1Temperature').val()),
+                    "GeneratorWinding2Temperature": parseFloat($('#GeneratorWinding2Temperature').val()),
+                    "HubTemperature": parseFloat($('#HubTemperature').val()),
+                    "MainBoxTemperature": parseFloat($('#MainBoxTemperature').val()),
+                    "NacellePosition": parseFloat($('#NacellePosition').val()),
+                    "ReactivePower": parseFloat($('#ReactivePower').val()),
+                    "RotorRPM": parseFloat($('#RotorRPM').val()),
+                    "TurbineStatus": parseInt($('#TurbineStatus').val()),
+                    "WindDirection": parseFloat($('#WindDirection').val()),
+                    "WindSpeed": parseFloat($('#WindSpeed').val()),
+                    
+                    // Time-based features
+                    "hour": now.getHours(),
+                    "dayofweek": now.getDay(),
+                    "quarter": Math.floor(now.getMonth() / 3) + 1,
+                    "month": now.getMonth() + 1,
+                    "year": now.getFullYear(),
+                    "dayofyear": Math.floor((now - new Date(now.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24)),
+                    
+                    // Historical features (using current ActivePower as placeholder)
+                    "lag_1h_ActivePower": parseFloat($('#ActivePower').val()),
+                    "lag_24h_ActivePower": parseFloat($('#ActivePower').val()),
+                    "lag_7d_ActivePower": parseFloat($('#ActivePower').val()),
+                    "rolling_mean_24h_ActivePower": parseFloat($('#ActivePower').val()),
+                    "rolling_mean_7d_ActivePower": parseFloat($('#ActivePower').val())
+                };
+
+                // Make the prediction request
+                $.ajax({
+                    url: '/predict',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function(response) {
+                        $('#result').show();
+                        $('#predictionValue').text(`Predicted Power Output: ${response.prediction.toFixed(2)} kW`);
+                    },
+                    error: function(xhr) {
+                        $('#result').show();
+                        $('#predictionValue').html(`<span class="text-danger">Error: ${xhr.responseJSON ? xhr.responseJSON.error : 'Unknown error'}</span>`);
+                        console.error('Prediction error:', xhr.responseJSON);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
