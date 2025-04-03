@@ -142,14 +142,6 @@ The model uses the following features for prediction:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-The MIT License is a permissive license that is short and to the point. It lets people do anything they want with your code as long as they provide attribution back to you and don't hold you liable.
-
-## Contact
-
-Martin Tay - martin.k.tay@hotmail.com
 
 Project Link: https://github.com/martinktay/xgboost-wind-turbine-power-prediction
